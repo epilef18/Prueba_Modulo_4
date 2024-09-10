@@ -1,6 +1,8 @@
-class SubTipoInvalidoError(Exception):
+class Error(Exception):
     pass
 
+class SubTipoInvalidoError(Error):
+    pass
 
-class LargoExcedidoError(Exception):
+class LargoExcedidoError(Error):
     pass
