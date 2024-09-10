@@ -3,10 +3,11 @@ from error import SubTipoInvalidoError
 
 class Anuncio:
     def __init__(self, ancho, alto, url_archivo, url_clic, sub_tipo):
-        self._ancho = self.validar_dimensiones(ancho)
-        self._alto = self.validar_dimensiones(alto)
-        self._url_archivo = url_archivo
-        self._sub_tipo = sub_tipo
+        self.__ancho = self.validar_dimensiones(ancho)
+        self.__alto = self.validar_dimensiones(alto)
+        self.__url_archivo = url_archivo
+        self.__url_clic = url_clic
+        self.__sub_tipo = sub_tipo
 
     def validar_dimension(self, parametro: int):
         """Valida que el parámetro sea mayor a cero
@@ -25,19 +26,37 @@ class Anuncio:
 
     @property
     def url_archivo(self):
-        return self._url_archivo
+        return self.__url_archivo
+
+    @url_archivo.setter
+    def url_archivo(self, url_archivo):
+        self.__url_archivo = url_archivo
 
     @property
     def url_clic(self):
-        return self._url_clic
+        return self.__url_clic
+
+    @url_clic.setter
+    def url_clic(self, url_clic):
+        self.__url_clic = url_clic
 
     @property
     def sub_tipo(self, subtipo):
-        pass
+        return self.__sub_tipo
+
+    @sub_tipo.setter
+    def sub_tipo(self, parametro):
+        if parametro not in self.SUB_TIPOS:
+            raise SubTipoInvalidoError(f"sub tipo {parametro} inválido.")
+        self.__sub_tipo = parametro
 
     @staticmethod
     def mostrar_formatos(self):
-        pass
+        for formato in [Video, Display, Social]:
+            print(f"FORMATO {formato.FORMATO}:")
+            print("==========")
+            for subtipo, i in formato.SUB_TIPOS:
+                print(f"{i}- {subtipo}")
 
     def comprimir_anuncio(self):
         """
@@ -55,8 +74,18 @@ class Anuncio:
 
 
 class Video(Anuncio):
+    FORMATO = "Video"
+    SUB_TIPOS = ("instream", "outstream")
+
     def __init__(self, ancho, alto, url_archivo, url_clic, sub_tipo, duracion):
-        self.duracion = duracion
+        super().__init__(1, 1, url_archivo, url_clic, sub_tipo)
+        self.duracion = self.validar_video(duracion)
+
+    def validar_video(self, parametro: int):
+        if parametro > 0:
+            return parametro
+        else:
+            return 5
 
     def comprimir_anuncio(self):
         """
@@ -74,6 +103,9 @@ class Video(Anuncio):
 
 
 class Display(Anuncio):
+    FORMATO = "Display"
+    SUB_TIPOS = ("tradicional", "native")
+
     def comprimir_anuncio(self):
         """
         docstring
@@ -88,6 +120,8 @@ class Display(Anuncio):
 
 
 class Social(Anuncio):
+    FORMATO = "Social"
+    SUB_TIPOS = ("facebook", "linkedin")
 
     def comprimir_anuncio(self):
         """
